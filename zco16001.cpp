@@ -56,6 +56,40 @@ typedef vector<double> vd;
 typedef vector< vector<int> > vii;
 
 
+int findMax(vector<int> v1, vector<int> v2, int k){
+
+	priority_queue <int> p1,p2;
+
+	for(int i = 0; i < v1.size();i++){
+		p1.push(v1[i]);
+	}
+
+	for(int i = 0; i < v2.size();i++){
+		p2.push(-v2[i]);
+	}
+
+	while(p1.top() > -(p2.top()) && k > 0){
+
+		int temp = p1.top();
+		int temp2 = p2.top();
+		p1.pop();
+		p2.pop();
+
+		//cout << temp << " " << temp2 << "\n";
+
+		p1.push(-temp2);
+		p2.push(-temp);
+
+		k--;
+	}
+
+	while(p2.size() > 1){
+		p2.pop();
+	}
+
+	return p1.top() - p2.top();
+}
+
 int main(){
 
 	// fast I/O
@@ -65,7 +99,7 @@ int main(){
 	// freopen("B-small-attempt0.in","rt",stdin);
 	// freopen("B.out","wt",stdout);
 
-	int n,k;
+	int n,k,result;
 
 	cin >> n >> k;
 
@@ -80,12 +114,18 @@ int main(){
 		cin >> v2[i];
 	}
 
-	priority_queue <int >  first; 
-	priority_queue <int >  second;
 
+	// if(*max_element(all(v1)) <= *max_element(all(v2))){
+	// 	result = findMax(v1,v2,k);
+	// }
+	// else{
+	// 	result = findMax(v2,v1,k);
+	// }
+
+	result = min(findMax(v1,v2,k),findMax(v2,v1,k));
 	
 
-	cout << second[n-1] + max << "\n";
+	cout << result << "\n";
 	
 	return 0;
 }

@@ -56,41 +56,27 @@ typedef vector<double> vd;
 typedef vector< vector<int> > vii;
 
 
-// int search_w(std::vector<int> v, int k){
-// 	int low = 0,high = v.size() - 1;
+int bin_search(std::vector<int> *v, int k){
+	
+	int l = 0,mid;
+	int h = v->size();
 
-// 	if(v[high] < k){
-// 		return -1;
-// 	}
+	while(l < h){
+		mid = (l + h) / 2;
 
-// 	if(k <= v[low]){
-// 		return v[low];
-// 	}
+		if(v->at(mid) == k){
+			return mid;
+		}
+		else if(v->at(mid) < k){
+			l = mid + 1;
+		}
+		else{
+			h = mid;
+		}
+	}
 
-// 	int mid	= (low + high) / 2;
-
-// 	while(mid > low){
-// 		if(v[mid] >= k){
-// 			high = mid;
-// 		}
-// 		else{
-// 			low = mid;
-// 		}
-
-// 		mid	= (low + high) / 2;
-// 	}
-// 	if(v[mid] >= k){
-// 		return v[mid];
-// 	}
-// 	else{
-// 		if(mid + 1 < v.size()){
-// 			return v[mid+1];
-// 		}
-// 		else{
-// 			return -1;
-// 		}
-// 	}
-// }
+	return l;
+}
 
 
 int main(){
@@ -101,6 +87,19 @@ int main(){
 
 	// freopen("B-small-attempt0.in","rt",stdin);
 	// freopen("B.out","wt",stdout);
+
+
+	// int myints[] = {10,20,30,40,50,60,70,80};
+ //  std::vector<int> v(myints,myints+8);           // 10 20 30 30 20 10 10 20
+
+ //  std::sort (v.begin(), v.end());                // 10 10 10 20 20 20 30 30
+
+ //  int low,up;
+ //  low=bin_search (v, 90); //          ^
+ //  //up= std::upper_bound (v.begin(), v.end(), 30) - v.begin(); //                   ^
+
+ //  std::cout << " at position " << low << '\n';
+ //  //std::cout << "upper_bound at position " << up << '\n';
 
 	int n,x,y,p,q;
 
@@ -131,28 +130,20 @@ int main(){
 	int j = 0; 
 	for(int i = 0; i < n; i++){
 		
+		int start = -1;
 		while(v[j] <= contests[i].first && j < x){
 			j++;
 		}
-		int start = -1;
+		
 		if(j != 0){
 			start = --j;
 		}
 
-		int end = upper_bound(all(w),contests[i].second) - w.begin();
-
-		if(end >= y){
-			if(w[y-1] >= contests[i].second){
-				end = y-1;
-			}
-			else{
-				end = -1;
-			}
-		}
+		int end = bin_search(&w,contests[i].second);
 
 		//cout << start << " " << end << "\n";
 
-		if(start != -1 && end != -1){
+		if(start != -1 && end < y){
 
 			if(w[end] - v[start] < min){
 				min = w[end] - v[start];
